@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Thanks</title>
+</h:head>
+
+<h:body>
+    <h1>Thank you</h1>
+    <p:separator/>
+    <h4>Registration Number</h4>
+    <p>#{onsiteR10n.family.familyId}</p>
+    <h4>Registration Fee</h4>
+    <p>#{onsiteR10n.registrationFee}</p>
+    <h4>Meal Fee</h4>
+    <p>#{onsiteR10n.mealFee}</p>
+    <p:separator/>
+    <h:form id="print-nametag-form">
+        <h:commandButton id="printNametag" action="#{confirmation.printNametag(onsiteR10n.family.familyId)}"
+                         value="Nametag"/>
+    </h:form>
+</h:body>
+</html>
