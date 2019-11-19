@@ -22,7 +22,7 @@
 
 <h:body>
     <p:tooltip/>
-    <h:form id="scammeal-form">
+    <h:form id="scanmeal-form">
         <div id="search" class="text-right">
             <p:growl id="growl" showDetail="true" sticky="true" severity="info"/>
             <p:messages id="messages" showDetail="true" closable="true" severity="warn, error, fatal">
@@ -54,11 +54,10 @@
                 </div>
                 <div class="ui-g-12">
                     <p:dataList id="mealtracker" value="#{scanMeal.mealtrackers}" var="mk" type="definition">
-                        <!--<h:outputText value="#{mk.lastModified}" converter="PrettyTimeConverter"/>-->
-                        <h:outputText value="#{mk.lastModified}" style="color:darkgray;font-weight:bold;font-size:40px" >
-                            <f:converter converterId="com.ocpsoft.PrettyTimeConverter" />
+                        <h:outputText value="#{mk.pickUpDate}" style="color:darkgray;font-weight:bold;font-size:40px" >
+                            <f:converter converterId="org.ocpsoft.PrettyTimeConverter"/>
                         </h:outputText>
-                        <h:outputText value=" #{mk.remark} 領了一盒" style="color:darkgrey;font-weight:bold;font-size:40px"/>
+                        <h:outputText value=" #{mk.name} 領了一盒" style="color:darkgrey;font-weight:bold;font-size:40px"/>
                     </p:dataList>
                 </div>
             </div>

@@ -1,12 +1,12 @@
-package com.cccmbiz.web;
+package com.cccmbiz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class SpringPrimeFacesApplication extends SpringBootServletInitializer {
+//public class SpringPrimeFacesApplication extends SpringBootServletInitializer {
+public class SpringPrimeFacesApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(SpringPrimeFacesApplication.class, args);

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<h:head>
+    <title>Scan Meal in PrimeFaces</title>
+    <style type="text/css">
+        .ui-g div {
+            background-color: #FAFAFA;
+            text-align: left;
+            border: 0px #fafafa;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <p:tooltip/>
+    <h:form id="checkmeal-form">
+        <div id="search" class="text-right">
+            <p:growl id="growl" showDetail="true" sticky="true" severity="info"/>
+            <p:messages id="messages" showDetail="true" closable="true" severity="warn, error, fatal">
+                <p:autoUpdate/>
+            </p:messages>
+            <span class="col-sm-9">
+                <h:inputText id="q" size="20" value="#{checkMeal.query}" a:autofocus="true"/>
+            </span>
+            <h:commandButton id="scanMealButton" action="#{checkMeal.enter}" value="Scan扫描"/>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-7">
+                <p:dataTable id="mealplans" var="mk" value="#{checkMeal.mealPlans}" type="definition">
+                    <f:facet name="header">
+                        Expand rows to see detailed information
+                    </f:facet>
+                    <p:column style="width:16px">
+                        <p:rowToggler/>
+                    </p:column>
+                    <p:column headerText="Meal">
+                        <h:outputText value="#{mk.mealId} - #{mk.description}"/>
+                    </p:column>
+                    <p:column headerText="Order 订了">
+                        <h:outputText value="#{mk.mealOrdered} 盒"/>
+                    </p:column>
+                    <p:column headerText="Taken 領了">
+                        <h:outputText value="#{mk.mealTaken}  盒"/>
+                    </p:column>
+
+                    <p:rowExpansion>
+                        <p:dataTable id="pickupRecord" var="rec" value="#{mk.pickUpRecord}" type="definition">
+                            <f:facet name="header">
+                                pick up records
+                            </f:facet>
+                            <p:column>
+                                <h:outputText value="#{rec.personId}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{rec.name}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{rec.pickUpDate}" style="color:darkgray;font-weight:bold;font-size:40px" >
+                                    <f:converter converterId="org.ocpsoft.PrettyTimeConverter"/>
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </p:rowExpansion>
+                </p:dataTable>
+
+            </div>
+        </div>
+    </h:form>
+</h:body>
+</html>
