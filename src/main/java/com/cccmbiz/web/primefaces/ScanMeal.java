@@ -2,6 +2,7 @@ package com.cccmbiz.web.primefaces;
 
 import com.cccmbiz.api.MealPickUpRecords;
 import com.cccmbiz.api.MealScanResponse;
+import com.cccmbiz.api.MealStatusResponse;
 import com.cccmbiz.services.RegMealService;
 import com.cccmbiz.web.*;
 import org.joda.time.DateTime;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.RequestScope;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -34,6 +36,36 @@ public class ScanMeal {
     private String mealTakenCount;
     private String mealLeftCount;
 
+    private Integer mealId;
+    private Map<String,Integer> mealIdOption = new HashMap<String, Integer>();
+
+    public Integer getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(Integer mealId) {
+        this.mealId = mealId;
+    }
+
+    public Map<String, Integer> getMealIdOption() {
+        return mealIdOption;
+    }
+
+    @PostConstruct
+    public void init() {
+
+        // Meal Id option
+        mealIdOption.put("DINNER SAT 12/28", 10);
+        mealIdOption.put("BREAKFAST SUN 12/29",14);
+        mealIdOption.put("LUNCH SUN 12/29",17);
+        mealIdOption.put("DINNER SUN 12/29",12);
+        mealIdOption.put("BREAKFAST MON 12/30",15);
+        mealIdOption.put("LUNCH MON 12/30",18);
+        mealIdOption.put("DINNER MON 12/30",13);
+        mealIdOption.put("BREAKFAST TUE 12/31",27);
+        mealIdOption.put("LUNCH TUE 12/31",28);
+    }
+
     public String getQuery() {
         return query;
     }
@@ -56,9 +88,11 @@ public class ScanMeal {
 
             try {
 
-                Integer personId = Integer.parseInt(query);
+                String scannedId = query;
 
-                MealScanResponse mealRecord = regMealService.scanMeal(personId);
+                logger.debug("Scanned ID: " + scannedId + " Meal ID: " + mealId);
+
+                MealScanResponse mealRecord = regMealService.scanMeal(scannedId, mealId);
                 // Obtain current time
                 DateTime now = DateTime.now();
                 Timestamp ts = new Timestamp(now.getMillis());
@@ -69,7 +103,7 @@ public class ScanMeal {
                     logger.info("No Order Record");
 
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "沒有订餐记录。"));
-                } else if (mealTotal <= mealRecord.getMealTaken()) {
+                } else if (mealTotal <= mealRecord.getMealTaken() && mealRecord.getMealStatus() ==1) {
                     logger.info("Exceed Order Count");
 
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "抱歉! ", "己領了全部的饭盒。"));

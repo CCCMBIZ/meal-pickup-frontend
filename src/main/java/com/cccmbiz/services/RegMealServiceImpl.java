@@ -59,26 +59,27 @@ public class RegMealServiceImpl implements RegMealService {
         }
     }
 
-    public MealStatusResponse checkMeal(Integer personId) throws ScanMealException {
-        logger.info("person ID: " + personId);
+    public MealStatusResponse checkMeal(String id, Integer mealId) throws ScanMealException {
+
+        logger.info("Scanned ID: " + id + " Meal ID: " + mealId);
 
         MealStatusRequest request = new MealStatusRequest();
-        request.setPersonId(personId);
+        request.setId(id);
+        request.setMealId(mealId);
 
         MealStatusResponse response = restTemplate.postForObject(providerMealServiceUrl, request, MealStatusResponse.class);
 
         return response;
     }
 
+    public MealScanResponse scanMeal(String id, Integer mealId) throws ScanMealException {
 
-    public MealScanResponse scanMeal(Integer personId) throws ScanMealException {
-
-        logger.info("person ID: " + personId);
+        logger.info("Scanned ID: " + id + " Meal ID: " + mealId);
 
         MealScanRequest request = new MealScanRequest();
-        request.setPersonId(personId);
+        request.setId(id);
+        request.setMealId(mealId);
 
-//        ResponseEntity<MealScanResponse> responseEntity;
         try {
             MealScanResponse response = restTemplate.postForObject(serviceUrl, request, MealScanResponse.class);
             return response;
@@ -86,7 +87,7 @@ public class RegMealServiceImpl implements RegMealService {
 
             logger.error("HTTP Error:" + httpError.getStatusCode() + " " + httpError.getMessage());
             if(HttpStatus.NOT_FOUND.equals(httpError.getStatusCode())) {
-                throw new NoSuchElementException("No Record for Person ID " + personId);
+                throw new NoSuchElementException("No Record for Scanned ID " + id);
             } else if (HttpStatus.SERVICE_UNAVAILABLE.equals(httpError.getStatusCode())) {
                 throw new ScanMealException("Service Error:" + httpError.getMessage());
             } else {

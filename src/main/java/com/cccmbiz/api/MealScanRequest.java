@@ -6,27 +6,36 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MealScanRequest {
 
-    private Integer personId = null;
+    private String id = null;
     private Integer mealId = null ;
 
-
-    @JsonProperty("personId")
-    public Integer getPersonId() {
-        return personId;
+    @JsonProperty("id")
+    public String getId() {
+        return id;
     }
 
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
+    public void setId(String id) {
+        this.id = id;
     }
 
+    @JsonProperty("mealId")
+    public Integer getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(Integer mealId) {
+        this.mealId = mealId;
+    }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class MealScanRequest {\n");
 
-        sb.append("  personId: ").append(personId).append("\n");
+        sb.append("class MealScanRequest {\n");
+        sb.append("  Scanned ID: ").append(id).append("\n");
+        sb.append("  Meal ID: ").append(mealId).append("\n");
         sb.append("}\n");
+
         return sb.toString();
     }
 }

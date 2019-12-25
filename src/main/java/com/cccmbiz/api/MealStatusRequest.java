@@ -7,28 +7,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MealStatusRequest {
 
-    private Integer personId = null;
-
-    private Integer familyId = null;
-
+    private String id = null;
     private Integer mealId = null;
 
-    @JsonProperty("personId")
-    public Integer getPersonId() {
-        return personId;
+    @JsonProperty("id")
+    public String getId() {
+        return id;
     }
 
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
-    }
-
-    @JsonProperty("familyId")
-    public Integer getFamilyId() {
-        return familyId;
-    }
-
-    public void setFamilyId(Integer familyId) {
-        this.familyId = familyId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     @JsonProperty("mealId")
@@ -36,7 +24,7 @@ public class MealStatusRequest {
         return mealId;
     }
 
-    public void setMealId(Integer phoneNumber) {
+    public void setMealId(Integer mealId) {
         this.mealId = mealId;
     }
 
@@ -45,9 +33,8 @@ public class MealStatusRequest {
         StringBuilder sb = new StringBuilder();
         sb.append("class MealStatusRequest {\n");
 
-        sb.append("  personId: ").append(personId).append("\n");
-        sb.append("  familyId: ").append(familyId).append("\n");
-        sb.append("  MealId: ").append(mealId).append("\n");
+        sb.append("  Scanned ID: ").append(id).append("\n");
+        sb.append("  Meal ID: ").append(mealId).append("\n");
         sb.append("}\n");
         return sb.toString();
     }

@@ -5,6 +5,6 @@ import com.cccmbiz.api.MealStatusResponse;
 import com.cccmbiz.web.ScanMealException;
 
 public interface RegMealService {
-    public MealScanResponse scanMeal(Integer personId) throws ScanMealException;
-    public MealStatusResponse checkMeal(Integer personId) throws ScanMealException;
+    public MealScanResponse scanMeal(String id, Integer mealId) throws ScanMealException;
+    public MealStatusResponse checkMeal(String id, Integer mealId) throws ScanMealException;
 }

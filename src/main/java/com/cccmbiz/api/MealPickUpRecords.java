@@ -7,11 +7,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MealPickUpRecords {
 
     private String pickUpDate = null;
-
     private Integer personId = 0;
-
     private String name = null;
-
 
     @JsonProperty("pickUpDate")
     public String getPickUpDate() {

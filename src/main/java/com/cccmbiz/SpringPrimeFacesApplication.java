@@ -6,7 +6,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @SpringBootApplication
 //public class SpringPrimeFacesApplication extends SpringBootServletInitializer {
-public class SpringPrimeFacesApplication {
+public class SpringPrimeFacesApplication extends SpringBootServletInitializer {
 
   public static void main(String[] args) {
     SpringApplication.run(SpringPrimeFacesApplication.class, args);
@@ -21,3 +21,4 @@ public class SpringPrimeFacesApplication {
 //    SpringApplication.run(SpringPrimeFacesApplication.class, args);
 //  }
 }
+

@@ -13,16 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.annotation.RequestScope;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Named
 @RequestScope
@@ -34,6 +32,37 @@ public class CheckMeal {
     private RegMealService regMealService ;
 
     private List<MealPlansStatus> mealPlans;
+
+    private Integer mealId;
+    private Map<String,Integer> mealIdOption = new HashMap<String, Integer>();
+
+    public Integer getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(Integer mealId) {
+        this.mealId = mealId;
+    }
+
+    public Map<String, Integer> getMealIdOption() {
+        return mealIdOption;
+    }
+
+    @PostConstruct
+    public void init() {
+
+        // Meal Id option
+        mealIdOption.put("DINNER SAT 12/28", 10);
+        mealIdOption.put("BREAKFAST SUN 12/29",14);
+        mealIdOption.put("LUNCH SUN 12/29",17);
+        mealIdOption.put("DINNER SUN 12/29",12);
+        mealIdOption.put("BREAKFAST MON 12/30",15);
+        mealIdOption.put("LUNCH MON 12/30",18);
+        mealIdOption.put("DINNER MON 12/30",13);
+        mealIdOption.put("BREAKFAST TUE 12/31",27);
+        mealIdOption.put("LUNCH TUE 12/31",28);
+    }
+
 
     public List<MealPlansStatus> getMealPlans() {
         return mealPlans;
@@ -59,9 +88,9 @@ public class CheckMeal {
 
             try {
 
-                Integer personId = Integer.parseInt(query);
+                String scannedId = query;
 
-                MealStatusResponse mealRecord = regMealService.checkMeal(personId);
+                MealStatusResponse mealRecord = regMealService.checkMeal(scannedId, mealId);
 
                 for (MealPlansStatus st : mealRecord.getMealPlans()) {
                     logger.info(st.getDescription());
