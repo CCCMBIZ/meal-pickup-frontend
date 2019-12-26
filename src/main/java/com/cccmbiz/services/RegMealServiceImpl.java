@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- *  EventManagerServiceImpl service
+ * EventManagerServiceImpl service
  **/
 @Service
 public class RegMealServiceImpl implements RegMealService {
@@ -49,13 +49,13 @@ public class RegMealServiceImpl implements RegMealService {
     @PostConstruct
     public void init() {
         restTemplate = new RestTemplate();
-        for (HttpMessageConverter<?> httpMessageConverter : restTemplate.getMessageConverters())  {
-            logger.info (httpMessageConverter.toString());
+        for (HttpMessageConverter<?> httpMessageConverter : restTemplate.getMessageConverters()) {
+            logger.info(httpMessageConverter.toString());
         }
         restTemplate.setMessageConverters(getMessageConverters());
         logger.info("--------- After ----------");
-        for (HttpMessageConverter<?> httpMessageConverter : restTemplate.getMessageConverters())  {
-            logger.info (httpMessageConverter.toString());
+        for (HttpMessageConverter<?> httpMessageConverter : restTemplate.getMessageConverters()) {
+            logger.info(httpMessageConverter.toString());
         }
     }
 
@@ -67,9 +67,21 @@ public class RegMealServiceImpl implements RegMealService {
         request.setId(id);
         request.setMealId(mealId);
 
-        MealStatusResponse response = restTemplate.postForObject(providerMealServiceUrl, request, MealStatusResponse.class);
+        try {
+            ResponseEntity<MealStatusResponse> responseEntity = restTemplate.getForEntity(providerMealServiceUrl + "/" + request.getId(), MealStatusResponse.class);
+            logger.error("HTTP Status Code:" + responseEntity.getStatusCode() + " " + responseEntity.getStatusCodeValue());
 
-        return response;
+            if (HttpStatus.NOT_FOUND.equals(responseEntity.getStatusCode())) {
+                throw new NoSuchElementException("No Record for Scanned ID " + id);
+            } else if (HttpStatus.SERVICE_UNAVAILABLE.equals(responseEntity.getStatusCode())) {
+                throw new ScanMealException("Service Unavailable Error. Unable to process " + id);
+            }
+
+            return responseEntity.getBody();
+
+        } catch (ResourceAccessException resourceError) {
+            throw new ScanMealException("Service Error:" + resourceError.getMessage());
+        }
     }
 
     public MealScanResponse scanMeal(String id, Integer mealId) throws ScanMealException {
@@ -86,7 +98,7 @@ public class RegMealServiceImpl implements RegMealService {
         } catch (HttpClientErrorException | HttpServerErrorException httpError) {
 
             logger.error("HTTP Error:" + httpError.getStatusCode() + " " + httpError.getMessage());
-            if(HttpStatus.NOT_FOUND.equals(httpError.getStatusCode())) {
+            if (HttpStatus.NOT_FOUND.equals(httpError.getStatusCode())) {
                 throw new NoSuchElementException("No Record for Scanned ID " + id);
             } else if (HttpStatus.SERVICE_UNAVAILABLE.equals(httpError.getStatusCode())) {
                 throw new ScanMealException("Service Error:" + httpError.getMessage());

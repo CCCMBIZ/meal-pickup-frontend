@@ -28,11 +28,6 @@
             <p:messages id="messages" showDetail="true" closable="true" severity="warn, error, fatal">
                 <p:autoUpdate/>
             </p:messages>
-            <p:outputLabel value="Meal: " />
-            <p:selectOneMenu id="mealId" value="#{checkMeal.mealId}" effect="fold" >
-                <f:selectItem itemLabel="Select One" itemValue="" />
-                <f:selectItems value="#{checkMeal.mealIdOption}" />
-            </p:selectOneMenu>
             <span class="col-sm-9">
                 <h:inputText id="q" size="20" value="#{checkMeal.query}" a:autofocus="true"/>
             </span>
