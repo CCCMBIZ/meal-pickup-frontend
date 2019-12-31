@@ -30,12 +30,14 @@
             </p:messages>
             <span class="col-sm-9">
                 <p:selectOneMenu id="mealId" value="#{scanMeal.mealId}" effect="fold">
-                    <f:selectItem itemLabel="Select One" itemValue=""/>
-                    <f:selectItems value="#{scanMeal.mealIdOption}"/>
+                    <f:selectItem itemLabel="" itemValue="0"/>
+                    <f:selectItems value="#{scanMeal.mealIdOption}" />
                 </p:selectOneMenu>
-                <h:inputText id="q" size="20" value="#{scanMeal.query}" a:autofocus="true"/>
+                <p:focus for="query"/>
+                <p:inputText id="query" size="20" value="#{scanMeal.query}" />
+
             </span>
-            <h:commandButton id="scanMealButton" action="#{scanMeal.enter}" value="Scan扫描"/>
+            <p:commandButton id="scanMealButton" action="#{scanMeal.enter}" value="Scan扫描" ajax="false" />
         </div>
         <div class="ui-g">
             <div class="ui-g-5 ui-g-nopad">

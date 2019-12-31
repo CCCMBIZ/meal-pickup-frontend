@@ -23,6 +23,9 @@ public class RegitrationMealConfiguration {
     @Value("${provider.meal.service.url}")
     private String providerMealServiceUrl;
 
+    @Value("${provider.meals.service.url}")
+    private String providerMealsServiceUrl;
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer
     propertySourcesPlaceholderConfigurer() {

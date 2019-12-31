@@ -1,11 +1,16 @@
 package com.cccmbiz.web.primefaces;
 
+import com.cccmbiz.api.MealInfoResponse;
 import com.cccmbiz.api.MealPickUpRecords;
 import com.cccmbiz.api.MealScanResponse;
 import com.cccmbiz.api.MealStatusResponse;
+import com.cccmbiz.domain.Meal;
 import com.cccmbiz.services.RegMealService;
 import com.cccmbiz.web.*;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +42,7 @@ public class ScanMeal {
     private String mealLeftCount;
 
     private Integer mealId;
-    private Map<String,Integer> mealIdOption = new HashMap<String, Integer>();
+    private Map<String, Integer> mealIdOption = new HashMap<String, Integer>();
 
     public Integer getMealId() {
         return mealId;
@@ -54,16 +59,22 @@ public class ScanMeal {
     @PostConstruct
     public void init() {
 
+        // Obtain current time
+        DateTime now = DateTime.now();
+        // Initial meal Id
+        mealId = getMealIDByTime(now);
+
         // Meal Id option
         mealIdOption.put("DINNER SAT 12/28", 10);
-        mealIdOption.put("BREAKFAST SUN 12/29",14);
-        mealIdOption.put("LUNCH SUN 12/29",17);
-        mealIdOption.put("DINNER SUN 12/29",12);
-        mealIdOption.put("BREAKFAST MON 12/30",15);
-        mealIdOption.put("LUNCH MON 12/30",18);
-        mealIdOption.put("DINNER MON 12/30",13);
-        mealIdOption.put("BREAKFAST TUE 12/31",27);
-        mealIdOption.put("LUNCH TUE 12/31",28);
+        mealIdOption.put("BREAKFAST SUN 12/29", 14);
+        mealIdOption.put("LUNCH SUN 12/29", 17);
+        mealIdOption.put("DINNER SUN 12/29", 12);
+        mealIdOption.put("BREAKFAST MON 12/30", 15);
+        mealIdOption.put("LUNCH MON 12/30", 18);
+        mealIdOption.put("DINNER MON 12/30", 13);
+        mealIdOption.put("BREAKFAST TUE 12/31", 27);
+        mealIdOption.put("LUNCH TUE 12/31", 28);
+
     }
 
     public String getQuery() {
@@ -103,7 +114,7 @@ public class ScanMeal {
                     logger.info("No Order Record");
 
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "沒有订餐记录。"));
-                } else if (mealTotal <= mealRecord.getMealTaken() && mealRecord.getMealStatus() ==1) {
+                } else if (mealTotal <= mealRecord.getMealTaken() && mealRecord.getMealStatus() == 1) {
                     logger.info("Exceed Order Count");
 
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "抱歉! ", "己領了全部的饭盒。"));
@@ -173,6 +184,32 @@ public class ScanMeal {
         mealTotalCount = "";
         mealTakenCount = "";
         mealLeftCount = "";
+    }
+
+    public Integer getMealIDByTime(DateTime mealTime) {
+
+        try {
+            MealInfoResponse mealResponse = regMealService.getMeals(1);
+
+            List<Meal> meals = mealResponse.getMeals();
+
+            for (Meal m : meals) {
+                LocalDate ld = LocalDate.fromDateFields(m.getDate());
+                LocalTime st = new LocalTime(m.getStartTime());
+                LocalTime et = new LocalTime(m.getEndTime());
+
+                Interval interval = new Interval(ld.toDateTime(st), ld.toDateTime(et));
+
+                if (interval.contains(mealTime) || interval.getEnd().isEqual(mealTime)) {
+                    logger.info("Found Meal ID : " + m.getId());
+                    return m.getId();
+                }
+            }
+
+        } catch (ScanMealException e) {
+            logger.error("Error getting meal time - " + e.getMessage());
+        }
+        return 0;
     }
 
     /**

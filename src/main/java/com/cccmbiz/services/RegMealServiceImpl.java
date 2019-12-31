@@ -1,9 +1,7 @@
 package com.cccmbiz.services;
 
-import com.cccmbiz.api.MealScanRequest;
-import com.cccmbiz.api.MealScanResponse;
-import com.cccmbiz.api.MealStatusRequest;
-import com.cccmbiz.api.MealStatusResponse;
+import com.cccmbiz.api.*;
+import com.cccmbiz.domain.Meal;
 import com.cccmbiz.web.ScanMealException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +37,9 @@ public class RegMealServiceImpl implements RegMealService {
     @Value("${provider.meal.service.url}")
     private String providerMealServiceUrl;
 
+    @Value("${provider.meals.service.url}")
+    private String providerMealsServiceUrl;
+
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -59,13 +60,13 @@ public class RegMealServiceImpl implements RegMealService {
         }
     }
 
-    public MealStatusResponse checkMeal(String id, Integer mealId) throws ScanMealException {
+    @Override
+    public MealStatusResponse checkMeal(String id) throws ScanMealException {
 
-        logger.info("Scanned ID: " + id + " Meal ID: " + mealId);
+        logger.info("Check all meals for Scanned ID: " + id );
 
         MealStatusRequest request = new MealStatusRequest();
         request.setId(id);
-        request.setMealId(mealId);
 
         try {
             ResponseEntity<MealStatusResponse> responseEntity = restTemplate.getForEntity(providerMealServiceUrl + "/" + request.getId(), MealStatusResponse.class);
@@ -84,6 +85,7 @@ public class RegMealServiceImpl implements RegMealService {
         }
     }
 
+    @Override
     public MealScanResponse scanMeal(String id, Integer mealId) throws ScanMealException {
 
         logger.info("Scanned ID: " + id + " Meal ID: " + mealId);
@@ -109,6 +111,30 @@ public class RegMealServiceImpl implements RegMealService {
             throw new ScanMealException("Service Error:" + resourceError.getMessage());
         }
 
+    }
+
+    @Override
+    public MealInfoResponse getMeals(Integer location) throws ScanMealException {
+
+        logger.info(" Meal Location: " + location);
+
+        try {
+            ResponseEntity<MealInfoResponse> responseEntity = restTemplate.getForEntity(providerMealsServiceUrl + "/" + location, MealInfoResponse.class);
+            logger.error("HTTP Status Code:" + responseEntity.getStatusCode() + " " + responseEntity.getStatusCodeValue());
+
+            MealInfoResponse response = responseEntity.getBody();
+
+            if (HttpStatus.NOT_FOUND.equals(responseEntity.getStatusCode())) {
+                throw new NoSuchElementException("No Record for location " + location);
+            } else if (HttpStatus.SERVICE_UNAVAILABLE.equals(responseEntity.getStatusCode())) {
+                throw new ScanMealException("Service Unavailable Error. Unable to process location " + location);
+            }
+
+            return response ;
+
+        } catch (ResourceAccessException resourceError) {
+            throw new ScanMealException("Service Error:" + resourceError.getMessage());
+        }
     }
 
     private List<HttpMessageConverter<?>> getMessageConverters() {

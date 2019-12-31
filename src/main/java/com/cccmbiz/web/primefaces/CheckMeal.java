@@ -90,7 +90,7 @@ public class CheckMeal {
 
                 String scannedId = query;
 
-                MealStatusResponse mealRecord = regMealService.checkMeal(scannedId, mealId);
+                MealStatusResponse mealRecord = regMealService.checkMeal(scannedId);
 
                 for (MealPlansStatus st : mealRecord.getMealPlans()) {
                     logger.info(st.getDescription());
