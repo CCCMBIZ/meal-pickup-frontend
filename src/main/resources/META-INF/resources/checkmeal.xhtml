@@ -31,7 +31,7 @@
             <span class="col-sm-9">
                 <h:inputText id="q" size="20" value="#{checkMeal.query}" a:autofocus="true"/>
             </span>
-            <h:commandButton id="scanMealButton" action="#{checkMeal.enter}" value="Scan扫描"/>
+            <h:commandButton id="checkMealButton" action="#{checkMeal.enter}" value="Scan扫描"/>
         </div>
         <div class="ui-g">
             <div class="ui-g-7">
@@ -51,25 +51,19 @@
                     <p:column headerText="Taken 領了">
                         <h:outputText value="#{mk.mealTaken}  盒"/>
                     </p:column>
-
-                    <p:rowExpansion>
-                        <p:dataTable id="pickupRecord" var="rec" value="#{mk.pickUpRecord}" type="definition">
-                            <f:facet name="header">
-                                pick up records
-                            </f:facet>
-                            <p:column>
-                                <h:outputText value="#{rec.personId}"/>
-                            </p:column>
-                            <p:column>
-                                <h:outputText value="#{rec.name}"/>
-                            </p:column>
-                            <p:column>
-                                <h:outputText value="#{rec.pickUpDate}" style="color:darkgray;font-weight:bold;font-size:40px" >
-                                    <f:converter converterId="org.ocpsoft.PrettyTimeConverter"/>
-                                </h:outputText>
-                            </p:column>
-                        </p:dataTable>
-                    </p:rowExpansion>
+                    <p:column headerText="Count">
+                        <ul>
+                            <ui:repeat id="pk" var="pr" value="#{mk.pickUpRecord}">
+                                <li>
+                                    <h:outputText value="#{pr.name}"/>
+                                    &nbsp;
+                                    <h:outputText value="#{pr.pickUpDate}">
+                                        <f:converter converterId="org.ocpsoft.PrettyTimeConverter"/>
+                                    </h:outputText>
+                                </li>
+                            </ui:repeat>
+                        </ul>
+                    </p:column>
                 </p:dataTable>
 
             </div>

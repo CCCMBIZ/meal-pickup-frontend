@@ -32,7 +32,7 @@ public class RegMealServiceImpl implements RegMealService {
     private RestTemplate restTemplate;
 
     @Value("${provider.service.url}")
-    String serviceUrl;
+    private String serviceUrl;
 
     @Value("${provider.meal.service.url}")
     private String providerMealServiceUrl;
@@ -82,6 +82,8 @@ public class RegMealServiceImpl implements RegMealService {
 
         } catch (ResourceAccessException resourceError) {
             throw new ScanMealException("Service Error:" + resourceError.getMessage());
+        } catch (HttpClientErrorException httpClientError) {
+            throw new ScanMealException("Service Error:" + httpClientError.getMessage());
         }
     }
 

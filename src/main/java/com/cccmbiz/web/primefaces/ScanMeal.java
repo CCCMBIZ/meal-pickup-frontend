@@ -65,15 +65,15 @@ public class ScanMeal {
         mealId = getMealIDByTime(now);
 
         // Meal Id option
-        mealIdOption.put("DINNER SAT 12/28", 10);
-        mealIdOption.put("BREAKFAST SUN 12/29", 14);
-        mealIdOption.put("LUNCH SUN 12/29", 17);
-        mealIdOption.put("DINNER SUN 12/29", 12);
-        mealIdOption.put("BREAKFAST MON 12/30", 15);
-        mealIdOption.put("LUNCH MON 12/30", 18);
-        mealIdOption.put("DINNER MON 12/30", 13);
-        mealIdOption.put("BREAKFAST TUE 12/31", 27);
-        mealIdOption.put("LUNCH TUE 12/31", 28);
+        mealIdOption.put("DINNER TUE 12/28", 29);
+        mealIdOption.put("BREAKFAST WED 12/29", 32);
+        mealIdOption.put("LUNCH WED 12/29", 35);
+        mealIdOption.put("DINNER WED 12/29", 30);
+        mealIdOption.put("BREAKFAST THU 12/30", 33);
+        mealIdOption.put("LUNCH THU 12/30", 36);
+        mealIdOption.put("DINNER THU 12/30", 31);
+        mealIdOption.put("BREAKFAST FRI 12/31", 34);
+        mealIdOption.put("LUNCH FRI 12/31", 37);
 
     }
 
@@ -89,7 +89,7 @@ public class ScanMeal {
         return this.mealtrackers;
     }
 
-    public String enter() throws ScanMealException {
+    public void enter() throws ScanMealException {
 
         reset();
 
@@ -133,7 +133,7 @@ public class ScanMeal {
                     logger.info(rec.getName());
                     // 2019-11-01T00:48:45.984-05:00
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-                    Date parsedDate = dateFormat.parse(rec.getPickUpDate());
+                    Date parsedDate = rec.getPickUpDate();
                     mt.setPickUpDate(new java.sql.Timestamp(parsedDate.getTime()));
                     mt.setName(rec.getName());
 
@@ -165,15 +165,14 @@ public class ScanMeal {
             } catch (ScanMealException scamMealException) {
                 logger.error("Scan Error:" + scamMealException.getMessage());
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "系統问題.不能連上服务器"));
-            } catch (ParseException parseError) {
-                logger.error("Scan Error:" + parseError.getMessage());
-                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "系統问題"));
+//            } catch (ParseException parseError) {
+//                logger.error("Scan Error:" + parseError.getMessage());
+//                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "系統问題"));
             } finally {
                 query = "";
             }
         }
 
-        return "success";
     }
 
 

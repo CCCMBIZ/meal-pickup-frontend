@@ -29,12 +29,56 @@ public class CheckMeal {
     private static final Logger logger = LoggerFactory.getLogger(CheckMeal.class);
 
     @Autowired
-    private RegMealService regMealService ;
+    private RegMealService regMealService;
 
     private List<MealPlansStatus> mealPlans;
 
+    private List<MealPickUpRecords> pickUpRecords;
+
     private Integer mealId;
-    private Map<String,Integer> mealIdOption = new HashMap<String, Integer>();
+
+    private Map<String, Integer> mealIdOption = new HashMap<String, Integer>();
+
+    public Map<String, Integer> getMealIdOption() {
+        return mealIdOption;
+    }
+
+    private String query;
+
+    @PostConstruct
+    public void init() {
+
+        // Meal Id option
+        mealIdOption.put("DINNER TUE 12/28 ", 29);
+        mealIdOption.put("BREAKFAST WED 12/29", 32);
+        mealIdOption.put("LUNCH WED 12/29", 35);
+        mealIdOption.put("DINNER WED 12/29", 30);
+        mealIdOption.put("BREAKFAST THU 12/30", 33);
+        mealIdOption.put("LUNCH THU 12/30", 36);
+        mealIdOption.put("DINNER THU 12/30", 31);
+        mealIdOption.put("BREAKFAST FRI 12/31", 34);
+        mealIdOption.put("LUNCH FRI 12/31", 37);
+
+    }
+
+
+    public List<MealPlansStatus> getMealPlans() {
+        return mealPlans;
+    }
+
+    public List<MealPickUpRecords> getPickUpRecords(Integer mealId) {
+
+        logger.debug("Meal ID: " + mealId);
+
+//        for (MealPlansStatus mps : this.mealPlans) {
+//            logger.debug("Compare " + mps.getMealId());
+//            if (mps.getMealId().compareTo(mealId) == 0) {
+//                return mps.getPickUpRecord();
+//            }
+//        }
+        return new ArrayList<>();
+    }
+
 
     public Integer getMealId() {
         return mealId;
@@ -44,32 +88,6 @@ public class CheckMeal {
         this.mealId = mealId;
     }
 
-    public Map<String, Integer> getMealIdOption() {
-        return mealIdOption;
-    }
-
-    @PostConstruct
-    public void init() {
-
-        // Meal Id option
-        mealIdOption.put("DINNER SAT 12/28", 10);
-        mealIdOption.put("BREAKFAST SUN 12/29",14);
-        mealIdOption.put("LUNCH SUN 12/29",17);
-        mealIdOption.put("DINNER SUN 12/29",12);
-        mealIdOption.put("BREAKFAST MON 12/30",15);
-        mealIdOption.put("LUNCH MON 12/30",18);
-        mealIdOption.put("DINNER MON 12/30",13);
-        mealIdOption.put("BREAKFAST TUE 12/31",27);
-        mealIdOption.put("LUNCH TUE 12/31",28);
-    }
-
-
-    public List<MealPlansStatus> getMealPlans() {
-        return mealPlans;
-    }
-
-    private String query;
-
     public String getQuery() {
         return query;
     }
@@ -78,7 +96,7 @@ public class CheckMeal {
         this.query = query;
     }
 
-    public String enter() throws ScanMealException {
+    public void enter() throws ScanMealException, ParseException {
 
         reset();
 
@@ -95,6 +113,14 @@ public class CheckMeal {
                 for (MealPlansStatus st : mealRecord.getMealPlans()) {
                     logger.info(st.getDescription());
                     logger.info("pick up count:" + st.getPickUpRecord().size());
+                    for (MealPickUpRecords rec : st.getPickUpRecord()) {
+                        logger.info("pickup person ID: \"" + rec.getPersonId() + "\"");
+                        logger.info("pickup person name: " + rec.getName());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+                        Date parsedDate = rec.getPickUpDate();
+                        logger.info("pickup person date: " + parsedDate.toString());
+                        logger.info("------------------------------------------------------------");
+                    }
                 }
 
                 if (mealPlans == null) {
@@ -111,8 +137,8 @@ public class CheckMeal {
                     context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "成动! ", "此是订餐记录。"));
 
                 }
-//
-//                for (MealPickUpRecords rec: mealRecord.getPickUpRecord()) {
+
+//                for (MealPickUpRecords rec: mealRecord.getMealPlans().getPickUpRecord()) {
 //                    MealTracker mt = new MealTracker();
 //                    logger.info("\"" + rec.getPickUpDate() + "\"");
 //                    logger.info(rec.getName());
@@ -131,12 +157,14 @@ public class CheckMeal {
             } catch (NumberFormatException numberFormatException) {
                 logger.error("Check Error:" + numberFormatException.getMessage());
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "請輸入正確注册号码"));
-            }  finally {
+            } catch (ScanMealException scanMealException) {
+                logger.error("Scan Error:" + scanMealException.getMessage());
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "系統问題"));
+            } finally {
                 query = "";
             }
         }
 
-        return "success";
     }
 
 

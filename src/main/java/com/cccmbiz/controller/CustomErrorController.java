@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Controller
 public class CustomErrorController implements ErrorController {
@@ -54,12 +55,20 @@ public class CustomErrorController implements ErrorController {
             context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "抱歉! ", "系統问題 - " + errorMsg));
         }
 
-        return "redirect: scanmeal.xhtml";
+        return "/static/index.html";
     }
 
-    @Override
+//    @Override
     public String getErrorPath() {
         return "/error";
     }
 
+    private void listAllHeaders(Map<String, String> headers) {
+        headers.forEach((key, value) -> {
+            logger.debug(String.format("Header '%s' = %s", key, value));
+        });
+
+        logger.debug(String.format(">>>>>>>>>>>> Listed %d headers <<<<<<<<<<<<<<", headers.size()));
+
+    }
 }

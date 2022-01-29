@@ -3,19 +3,21 @@ package com.cccmbiz.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
+
 
 public class MealPickUpRecords {
 
-    private String pickUpDate = null;
+    private Date pickUpDate = null;
     private Integer personId = 0;
     private String name = null;
 
     @JsonProperty("pickUpDate")
-    public String getPickUpDate() {
+    public Date getPickUpDate() {
         return pickUpDate;
     }
 
-    public void setPickUpDate(String pickUpDate) {
+    public void setPickUpDate(Date pickUpDate) {
         this.pickUpDate = pickUpDate;
     }
 
