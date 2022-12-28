@@ -65,15 +65,15 @@ public class ScanMeal {
         mealId = getMealIDByTime(now);
 
         // Meal Id option
-        mealIdOption.put("DINNER TUE 12/28", 29);
-        mealIdOption.put("BREAKFAST WED 12/29", 32);
-        mealIdOption.put("LUNCH WED 12/29", 35);
-        mealIdOption.put("DINNER WED 12/29", 30);
-        mealIdOption.put("BREAKFAST THU 12/30", 33);
-        mealIdOption.put("LUNCH THU 12/30", 36);
-        mealIdOption.put("DINNER THU 12/30", 31);
-        mealIdOption.put("BREAKFAST FRI 12/31", 34);
-        mealIdOption.put("LUNCH FRI 12/31", 37);
+        mealIdOption.put("DINNER WED 12/28", 39);
+        mealIdOption.put("BREAKFAST THU 12/29", 42);
+        mealIdOption.put("LUNCH THU 12/29", 45);
+        mealIdOption.put("DINNER THU 12/29", 40);
+        mealIdOption.put("BREAKFAST FRI 12/30", 43);
+        mealIdOption.put("LUNCH FRI 12/30", 46);
+        mealIdOption.put("DINNER FRI 12/30", 41);
+        mealIdOption.put("BREAKFAST SAT 12/31", 44);
+        mealIdOption.put("LUNCH SAT 12/31", 47);
 
     }
 

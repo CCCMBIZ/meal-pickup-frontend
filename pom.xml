@@ -3,14 +3,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.uscellular.web.ui</groupId>
-    <artifactId>dynamic-development-frontend</artifactId>
+    <groupId>com.cccmbiz</groupId>
+    <artifactId>meal-pickup-frontend</artifactId>
 
-    <version>1.0.2</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
-    <name>dynamic-development-frontend</name>
-    <description>Dynamic Development Frontend Application</description>
+    <name>meal-pickup-frontend</name>
+    <description>Meal Pickup Frontend Application</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
